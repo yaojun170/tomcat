@@ -151,7 +151,6 @@
       <Host name="localhost"  appBase="webapps"
             unpackWARs="true" autoDeploy="true">
 
-        <Context path="/" reloadable="false" docBase="/Users/yaojun/work/devcode/others/simple-mvc/target/simple-mvc"></Context>
         <!-- SingleSignOn valve, share authentication between web applications
              Documentation at: /docs/config/valve.html -->
         <!--
