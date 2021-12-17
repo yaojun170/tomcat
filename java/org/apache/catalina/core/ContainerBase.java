@@ -896,6 +896,7 @@ public abstract class ContainerBase extends LifecycleMBeanBase implements Contai
     @Override
     protected void initInternal() throws LifecycleException {
         BlockingQueue<Runnable> startStopQueue = new LinkedBlockingQueue<>();
+        //创建一个线程池，为了后面并行初始化Host
         startStopExecutor = new ThreadPoolExecutor(
                 getStartStopThreadsInternal(),
                 getStartStopThreadsInternal(), 10, TimeUnit.SECONDS,

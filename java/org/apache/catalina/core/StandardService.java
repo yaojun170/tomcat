@@ -525,13 +525,14 @@ public class StandardService extends LifecycleMBeanBase implements Service {
      * Invoke a pre-startup initialization. This is used to allow connectors
      * to bind to restricted ports under Unix operating environments.
      */
+    // 主要干了两件事儿 engine.init 和 connector.init
     @Override
     protected void initInternal() throws LifecycleException {
 
         super.initInternal();
 
         if (engine != null) {
-            engine.init();
+            engine.init();//**
         }
 
         // Initialize any Executors
@@ -549,7 +550,7 @@ public class StandardService extends LifecycleMBeanBase implements Service {
         synchronized (connectorsLock) {
             for (Connector connector : connectors) {
                 try {
-                    connector.init();
+                    connector.init();//**,直接见Connector.initInternal()
                 } catch (Exception e) {
                     String message = sm.getString(
                             "standardService.connector.initFailed", connector);

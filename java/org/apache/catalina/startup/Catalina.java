@@ -102,7 +102,7 @@ public class Catalina {
     /**
      * The server component we are starting or stopping.
      */
-    protected Server server = null;
+    protected Server server = null;//StandardServer
 
 
     /**
@@ -542,7 +542,7 @@ public class Catalina {
         // Before digester - it may be needed
         initNaming();
 
-        // Create and execute our Digester
+        // Create and execute our Digester,用于解析 server.xml
         Digester digester = createStartDigester();
 
         InputSource inputSource = null;
@@ -550,7 +550,7 @@ public class Catalina {
         File file = null;
         try {
             try {
-                file = configFile();
+                file = configFile();//tomcat配置文件，conf/server.xml
                 inputStream = new FileInputStream(file);
                 inputSource = new InputSource(file.toURI().toURL().toString());
             } catch (Exception e) {
@@ -636,7 +636,7 @@ public class Catalina {
 
         // Start the new server
         try {
-            getServer().init();
+            getServer().init();//**
         } catch (LifecycleException e) {
             if (Boolean.getBoolean("org.apache.catalina.startup.EXIT_ON_INIT_FAILURE")) {
                 throw new java.lang.Error(e);

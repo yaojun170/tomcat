@@ -249,7 +249,7 @@ public final class Bootstrap {
      */
     public void init() throws Exception {
 
-        initClassLoaders();
+        initClassLoaders();//初始化类加载器,URLClassLoader
 
         Thread.currentThread().setContextClassLoader(catalinaLoader);
 
@@ -302,7 +302,7 @@ public final class Bootstrap {
         if (log.isDebugEnabled()) {
             log.debug("Calling startup class " + method);
         }
-        method.invoke(catalinaDaemon, param);
+        method.invoke(catalinaDaemon, param);//Catalina.load()
     }
 
 
@@ -342,7 +342,7 @@ public final class Bootstrap {
         }
 
         Method method = catalinaDaemon.getClass().getMethod("start", (Class [])null);
-        method.invoke(catalinaDaemon, (Object [])null);
+        method.invoke(catalinaDaemon, (Object [])null);//Catalina.start()
     }
 
 
