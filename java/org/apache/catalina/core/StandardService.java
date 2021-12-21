@@ -532,7 +532,7 @@ public class StandardService extends LifecycleMBeanBase implements Service {
         super.initInternal();
 
         if (engine != null) {
-            engine.init();//**
+            engine.init();//**创建线程池
         }
 
         // Initialize any Executors
