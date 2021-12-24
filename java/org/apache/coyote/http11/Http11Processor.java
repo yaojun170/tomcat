@@ -632,11 +632,12 @@ public class Http11Processor extends AbstractProcessor {
                 keepAlive = false;
             }
 
+            //关键代码***
             // Process the request in the adapter
             if (getErrorState().isIoAllowed()) {
                 try {
                     rp.setStage(org.apache.coyote.Constants.STAGE_SERVICE);
-                    getAdapter().service(request, response);
+                    getAdapter().service(request, response);//重点
                     // Handle when the response was committed before a serious
                     // error occurred.  Throwing a ServletException should both
                     // set the status to 500 and set the errorException.

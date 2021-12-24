@@ -233,7 +233,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
                 throw new IllegalArgumentException(sm.getString("endpoint.init.bind.inherited"));
             }
         }
-        serverSock.configureBlocking(true); //mimic APR behavior
+        serverSock.configureBlocking(true); //mimic APR behavior//?阻塞式的接受连接？
 
         if (pollerThreadCount <= 0) {
             //minimum one poller thread
@@ -270,7 +270,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
                 createExecutor();
             }
 
-            initializeConnectionLatch();
+            initializeConnectionLatch();//设置最大连接数限制
 
             // Start poller threads
             pollers = new Poller[getPollerThreadCount()];
@@ -536,7 +536,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
                     if (running && !paused) {
                         // setSocketOptions() will hand the socket off to
                         // an appropriate processor if successful
-                        if (!setSocketOptions(socket)) {
+                        if (!setSocketOptions(socket)) {//**socket连接处理
                             closeSocket(socket);
                         }
                     } else {
@@ -867,6 +867,8 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
 
                 try {
                     if (!close) {
+                        // events 方法会处理Acceptor注册到Poller中的PollerEvent
+                        // 主要是注册读事件
                         hasEvents = events();
                         if (wakeupCounter.getAndSet(-1) > 0) {
                             // If we are here, means we have other stuff to do
@@ -908,7 +910,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
                     // Attachment may be null if another thread has called
                     // cancelledKey()
                     if (socketWrapper != null) {
-                        processKey(sk, socketWrapper);
+                        processKey(sk, socketWrapper);//**处理检测到的IO事件
                     }
                 }
 
@@ -931,6 +933,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel> {
                             unreg(sk, attachment, sk.readyOps());
                             boolean closeSocket = false;
                             // Read goes before write
+                            // 关键代码，调用processSocket方法处理读事件
                             if (sk.isReadable()) {
                                 if (!processSocket(attachment, SocketEvent.OPEN_READ, true)) {
                                     closeSocket = true;
